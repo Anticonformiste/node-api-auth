@@ -8,7 +8,7 @@ Phase2:<br/>
 -TO TRANSFER YOUR LOCAL NODE.JS server to HTTPS:<br/>
 1)please read carefully the *~/ssl/generate-certificates.sh* file, to setup SSL on your server. It's mandatory to publish live your facebook app.<br/>
 2)IMPORTANT: <br/>
-=>OSx || Linux users: change any occurance of -subj, following this pattern: '//' at the start to '/' and any '\' to '/'
+=>OSx || Linux users: change any occurance of -subj, following this pattern: '//' at the start to '/' and any '\\' to '/'
 (Because I'm on a windows env.)<br/>
 ex: (-subj "//CN=$CN\O=$ORG\UID=$USER_ID") to (-subj "/CN=$CN/O=$ORG/UID=$USER_ID")<br/>
 3)run this script via your terminal $~ssl: ./generate-certificates.sh<br/>
