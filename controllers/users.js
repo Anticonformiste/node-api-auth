@@ -19,7 +19,13 @@ module.exports = {
   signUp: async (req, res, next) => {
     // get email & password
     const { email, password } = req.value.body;
-    const newUser = new User({ email, password });
+    const newUser = new User({
+      method: 'local',
+      local: {
+        email: email,
+        password: password
+      }
+    });
     await Actions.createUser(newUser, (err, user) => {
       if (err) {
         return res
@@ -30,7 +36,7 @@ module.exports = {
       const token = signToken(newUser);
       return res
         .status(200)
-        .json({ msg: `user created: ${user.email}`, token });
+        .json({ msg: `user created: ${user.local.email}`, jwt: token });
     });
   },
 
@@ -40,10 +46,18 @@ module.exports = {
 
     return res
       .status(200)
-      .json({ msg: `user "${req.user.email}" logged In !`, token });
+      .json({ msg: `user "${req.user.email}" logged In !`, jwt: token });
   },
 
   getProfile: async (req, res, next) => {
     return res.status(200).json({ msg: 'Profile Getted' });
+  },
+
+  facebookOauth: async (req, res, next) => {
+    // generate a Token
+    const token = signToken(req.user);
+    return res
+      .status(200)
+      .json({ msg: `User ${req.user.facebook.fullName} Created!`, jwt: token });
   }
 };

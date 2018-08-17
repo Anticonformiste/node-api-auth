@@ -3,16 +3,39 @@ const bcrypt = require('bcrypt');
 
 //create the User schema
 const userSchema = new mongoose.Schema({
-  email: {
+  method: {
     type: String,
-    unique: true,
-    required: [true, 'please insert an email'],
-    trim: true,
-    lowercase: true
+    enum: ['local', 'facebook'],
+    required: true
   },
-  password: {
-    type: String,
-    required: [true, 'please give a password for the account']
+  local: {
+    email: {
+      type: String,
+      unique: true,
+      // required: [true, 'please insert an email'],
+      trim: true,
+      lowercase: true
+    },
+    password: {
+      type: String
+      // required: [true, 'please give a password for the account']
+    }
+  },
+  facebook: {
+    id: {
+      type: String
+    },
+    tokens: {
+      access: { type: String },
+      refresh: { type: String }
+    },
+    email: {
+      type: String,
+      lowercase: true
+    },
+    fullName: {
+      type: String
+    }
   }
 });
 //Compile model from the schema
@@ -24,9 +47,9 @@ module.exports = {
     // the CRUD + Business Logic
     createUser: (newUser, callback) => {
       bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
+        bcrypt.hash(newUser.local.password, salt, (err, hash) => {
           if (err) return callback(err, null);
-          newUser.password = hash;
+          newUser.local.password = hash;
           User.create(newUser, callback);
         });
       });

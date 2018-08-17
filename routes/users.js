@@ -4,6 +4,7 @@ const { validateBody, schema } = require('../helpers/routerHelpers');
 
 const passport = require('passport');
 const passportConf = require('../passport');
+
 const usersController = require('../controllers/users');
 
 router
@@ -25,4 +26,10 @@ router
     usersController.getProfile
   );
 
+router
+  .route('/oauth/fb')
+  .post(
+    passport.authenticate('fb-token', { session: false }),
+    usersController.facebookOauth
+  );
 module.exports = router;
